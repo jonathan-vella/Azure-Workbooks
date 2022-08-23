@@ -1,0 +1,937 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Operational Excellence assessment recommendations workbook\r\n\r\n![alt text](https://docs.microsoft.com/en-us/learn/modules/azure-well-architected-introduction/media/pillars.png \"Well-architected framework pillars\")\r\n\r\nFor more information visit [Microsoft Azure Well-Architected Framework](https://docs.microsoft.com/en-us/azure/architecture/framework/resiliency/)"
+      },
+      "name": "text - 9"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "7a81c5c8-0106-40af-a4ad-c662cde88252",
+            "cellValue": "SelectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Advisor Trend",
+            "subTarget": "Trend",
+            "style": "link"
+          },
+          {
+            "id": "b44c39a3-2e51-4617-b116-4a23cbe7209f",
+            "cellValue": "SelectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Advisor Recommendations",
+            "subTarget": "Recommendations",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - 9"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "title": "Advisor Trend",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "c3fa8b99-de68-468b-8863-cc30c0e2a55a",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "SubscriptionTrend",
+                  "type": 6,
+                  "isRequired": true,
+                  "value": "/subscriptions/4c2356d6-4809-4c69-adaf-e5d670aad86c",
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "includeAll": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "label": "Subscription"
+                }
+              ],
+              "style": "pills",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "name": "parameters - 1"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## Operational Excellence Advisor Score"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"GET\",\"path\":\"/subscriptions/{SubscriptionTrend:id}/providers/Microsoft.Advisor/advisorScore\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2020-07-01-preview\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.*[?(@.name=='OperationalExcellence')].properties.lastRefreshedScore\",\"columns\":[{\"path\":\"date\",\"columnid\":\"Date\"},{\"path\":\"score\",\"columnid\":\"Score\"},{\"path\":\"impactedResourceCount\",\"columnid\":\"ImpactedResources\"}]}}]}",
+                    "size": 4,
+                    "queryType": 12,
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Score",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": ">=",
+                                "thresholdValue": "90",
+                                "representation": "green",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "<",
+                                "thresholdValue": "90",
+                                "representation": "orange",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "<=",
+                                "thresholdValue": "50",
+                                "representation": "red",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          },
+                          "numberFormat": {
+                            "unit": 1,
+                            "options": {
+                              "style": "decimal"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "sortBy": [],
+                    "tileSettings": {
+                      "showBorder": false
+                    }
+                  },
+                  "name": "query - 0"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## Advisor score trend"
+                  },
+                  "name": "text - 4"
+                },
+                {
+                  "type": 9,
+                  "content": {
+                    "version": "KqlParameterItem/1.0",
+                    "parameters": [
+                      {
+                        "id": "50a76153-3fdd-4c8b-82ba-1b957ebf905c",
+                        "version": "KqlParameterItem/1.0",
+                        "name": "AggregationLevel",
+                        "label": "Aggregation Level",
+                        "type": 2,
+                        "isRequired": true,
+                        "value": "Monthly",
+                        "typeSettings": {
+                          "additionalResourceOptions": [],
+                          "showDefault": false
+                        },
+                        "jsonData": "[\r\n    {\"value\":\"Daily\"},{\"value\":\"Weekly\",\"selected\":true},{\"value\":\"Monthly\"}\r\n]",
+                        "timeContext": {
+                          "durationMs": 86400000
+                        }
+                      }
+                    ],
+                    "style": "pills",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "name": "parameters - 3"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"GET\",\"path\":\"/subscriptions/{SubscriptionTrend:id}/providers/Microsoft.Advisor/advisorScore\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2020-07-01-preview\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.*[?(@.name=='OperationalExcellence')].properties.timeSeries[?(@.aggregationLevel=='{AggregationLevel}')].scoreHistory\",\"columns\":[{\"path\":\"$.date\",\"columnid\":\"Date\"},{\"path\":\"$.score\",\"columnid\":\"Score\"},{\"path\":\"$.impactedResourceCount\",\"columnid\":\"ImpactedResourcesCount\"},{\"path\":\"$.potentialScoreIncrease\",\"columnid\":\"PotentialScoreIncrease\"}]}}]}",
+                    "size": 0,
+                    "aggregation": 3,
+                    "queryType": 12,
+                    "visualization": "timechart",
+                    "sortBy": []
+                  },
+                  "name": "query - 2"
+                }
+              ]
+            },
+            "name": "Advisor Score"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "SelectedTab",
+        "comparison": "isEqualTo",
+        "value": "Trend"
+      },
+      "name": "Advisor Trend"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "51aa3a9b-14e0-4c22-a60d-abdbf8813f00",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "Subscription",
+                  "type": 6,
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "value": [
+                    "/subscriptions/4c2356d6-4809-4c69-adaf-e5d670aad86c"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "includeAll": true,
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                }
+              ],
+              "style": "pills",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "name": "parameters - 0"
+          },
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "4b846956-4fa8-4d35-b396-74a87200f819",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "RG_Filter",
+                  "label": "Filter By",
+                  "type": 2,
+                  "value": null,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\":\"Resource Group\",\"selected\":\"true\"},\r\n    { \"value\":\"Tags\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                }
+              ],
+              "style": "pills",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "name": "parameters - 2"
+          },
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "parameters": [
+                {
+                  "id": "6cb303fd-4812-4097-a468-a177d8782913",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ResourceGroup",
+                  "label": "Resource Group",
+                  "type": 2,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "resourceContainers | where type == 'microsoft.resources/subscriptions/resourcegroups'\r\n| project resourceGroup\r\n| order by resourceGroup asc",
+                  "crossComponentResources": [
+                    "{Subscription}"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "defaultValue": "value::all",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "value": [
+                    "aclares-core-uk"
+                  ]
+                }
+              ],
+              "style": "pills",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            "conditionalVisibility": {
+              "parameterName": "RG_Filter",
+              "comparison": "isEqualTo",
+              "value": "Resource Group"
+            },
+            "name": "parameters - 2"
+          },
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "parameters": [
+                {
+                  "id": "df2a5339-2dd6-478a-a2b1-2dce7651ed0a",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TagName",
+                  "label": "Tag Name",
+                  "type": 2,
+                  "query": "Resources\r\n| where tags != '' and tags != '[]'\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| distinct tagName\r\n| order by tagName asc",
+                  "crossComponentResources": [
+                    "{Subscription}"
+                  ],
+                  "value": "type",
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                },
+                {
+                  "id": "b2121f90-ccd8-43fe-b1c1-db9bf0f1a0e3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TagValue",
+                  "label": "Tag Value",
+                  "type": 2,
+                  "query": "Resources\r\n| mvexpand tags\r\n| extend tagName = tostring(bag_keys(tags)[0])\r\n| extend tagValue = tostring(tags[tagName])\r\n| where tags != '' and tags != '[]' and tostring(bag_keys(tags)[0]) == '{TagName}'\r\n| distinct tagValue\r\n| order by tagValue asc",
+                  "crossComponentResources": [
+                    "{Subscription}"
+                  ],
+                  "value": "core",
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                }
+              ],
+              "style": "pills",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            "conditionalVisibility": {
+              "parameterName": "RG_Filter",
+              "comparison": "isEqualTo",
+              "value": "Tags"
+            },
+            "name": "parameters - 3"
+          },
+          {
+            "type": 11,
+            "content": {
+              "version": "LinkItem/1.0",
+              "style": "tabs",
+              "links": [
+                {
+                  "id": "96d6402c-ff6c-4cf8-961d-8fbe5c98be60",
+                  "cellValue": "selectedTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "Azure Advisor Recommendations",
+                  "subTarget": "advisor",
+                  "preText": "VirtualMachines",
+                  "style": "link"
+                }
+              ]
+            },
+            "name": "links - 4"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 12,
+                  "content": {
+                    "version": "NotebookGroup/1.0",
+                    "groupType": "editable",
+                    "items": [
+                      {
+                        "type": 3,
+                        "content": {
+                          "version": "KqlItem/1.0",
+                          "query": "advisorresources\r\n| where type == \"microsoft.advisor/recommendations\"\r\n| where tostring (properties.category) ==  \"OperationalExcellence\"\r\n| extend Problem=properties.shortDescription.problem,AffectedResource=tostring(properties.resourceMetadata.resourceId),Solution=properties.shortDescription.solution,Severity=properties.impact, ResourceGroup=resourceGroup\r\n| project Problem,AffectedResource, Severity, Solution, resourceGroup, subscriptionId\r\n| where resourceGroup in ({ResourceGroup})",
+                          "size": 0,
+                          "title": "Azure Advisor recommendations",
+                          "noDataMessage": "You are following all of our Operatonal Excellence recommendations",
+                          "noDataMessageStyle": 3,
+                          "showExportToExcel": true,
+                          "queryType": 1,
+                          "resourceType": "microsoft.resourcegraph/resources",
+                          "crossComponentResources": [
+                            "{Subscription}"
+                          ],
+                          "gridSettings": {
+                            "formatters": [
+                              {
+                                "columnMatch": "Problem",
+                                "formatter": 1
+                              },
+                              {
+                                "columnMatch": "Severity",
+                                "formatter": 18,
+                                "formatOptions": {
+                                  "thresholdsOptions": "colors",
+                                  "thresholdsGrid": [
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "High",
+                                      "representation": "redBright",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "Medium",
+                                      "representation": "orange",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "Low",
+                                      "representation": "turquoise",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "Default",
+                                      "thresholdValue": null,
+                                      "representation": "gray",
+                                      "text": "{0}{1}"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "columnMatch": "Solution",
+                                "formatter": 1
+                              },
+                              {
+                                "columnMatch": "resourceGroup",
+                                "formatter": 14,
+                                "formatOptions": {
+                                  "linkTarget": null,
+                                  "showIcon": true
+                                }
+                              },
+                              {
+                                "columnMatch": "subscriptionId",
+                                "formatter": 15,
+                                "formatOptions": {
+                                  "linkTarget": null,
+                                  "showIcon": true
+                                }
+                              },
+                              {
+                                "columnMatch": "Description",
+                                "formatter": 1
+                              }
+                            ],
+                            "hierarchySettings": {
+                              "treeType": 1,
+                              "groupBy": [
+                                "Problem"
+                              ],
+                              "expandTopLevel": true
+                            }
+                          }
+                        },
+                        "name": "query - 0"
+                      }
+                    ]
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "RG_Filter",
+                    "comparison": "isNotEqualTo",
+                    "value": "Tags"
+                  },
+                  "name": "group - AzureAdvisor-Subscription"
+                },
+                {
+                  "type": 12,
+                  "content": {
+                    "version": "NotebookGroup/1.0",
+                    "groupType": "editable",
+                    "items": [
+                      {
+                        "type": 3,
+                        "content": {
+                          "version": "KqlItem/1.0",
+                          "query": "advisorresources\r\n| where type == \"microsoft.advisor/recommendations\"\r\n| where tostring (properties.category) ==  \"OperationalExcellence\"\r\n| extend Problem=properties.shortDescription.problem,AffectedResource=tostring(properties.resourceMetadata.resourceId),AffectedResourceName=tostring(properties.impactedValue),Solution=properties.shortDescription.solution,Severity=properties.impact, ResourceGroup=resourceGroup\r\n| project Problem,AffectedResource, AffectedResourceName, Severity, Solution, subscriptionId\r\n    | join ( resources | mvexpand tags | extend  AffectedResource=id, Tags=tags, resourceGroup \r\n    | extend tagName = tostring(bag_keys(tags)[0])\r\n    | extend tagValue = tostring(tags[tagName]) ) on AffectedResource\r\n    | extend ResourceGroup=strcat(\"/subscriptions/\",subscriptionId,\"/resourceGroups/\",resourceGroup)\r\n    | where tagName has '{TagName}' and tagValue has '{TagValue}'\r\n    | project  Problem,AffectedResource, tagName,tagValue, subscriptionId, Severity, Solution\r\n",
+                          "size": 0,
+                          "title": "Azure Advisor recommendations",
+                          "noDataMessage": "You are following all of our Operational Excellence recommendations",
+                          "noDataMessageStyle": 3,
+                          "queryType": 1,
+                          "resourceType": "microsoft.resourcegraph/resources",
+                          "crossComponentResources": [
+                            "value::all"
+                          ],
+                          "gridSettings": {
+                            "formatters": [
+                              {
+                                "columnMatch": "Problem",
+                                "formatter": 1
+                              },
+                              {
+                                "columnMatch": "Severity",
+                                "formatter": 18,
+                                "formatOptions": {
+                                  "thresholdsOptions": "colors",
+                                  "thresholdsGrid": [
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "High",
+                                      "representation": "redBright",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "Medium",
+                                      "representation": "orange",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "==",
+                                      "thresholdValue": "Low",
+                                      "representation": "turquoise",
+                                      "text": "{0}{1}"
+                                    },
+                                    {
+                                      "operator": "Default",
+                                      "thresholdValue": null,
+                                      "representation": "gray",
+                                      "text": "{0}{1}"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "columnMatch": "Remediation",
+                                "formatter": 7,
+                                "formatOptions": {
+                                  "linkTarget": "Url",
+                                  "linkLabel": "Open remediation"
+                                }
+                              },
+                              {
+                                "columnMatch": "ResourceGroup",
+                                "formatter": 14,
+                                "formatOptions": {
+                                  "linkTarget": null,
+                                  "showIcon": true
+                                }
+                              },
+                              {
+                                "columnMatch": "tagName",
+                                "formatter": 18,
+                                "formatOptions": {
+                                  "thresholdsOptions": "icons",
+                                  "thresholdsGrid": [
+                                    {
+                                      "operator": "Default",
+                                      "thresholdValue": null,
+                                      "representation": "Tags",
+                                      "text": "{0}{1}"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "columnMatch": "tagValue",
+                                "formatter": 18,
+                                "formatOptions": {
+                                  "thresholdsOptions": "icons",
+                                  "thresholdsGrid": [
+                                    {
+                                      "operator": "Default",
+                                      "thresholdValue": null,
+                                      "representation": "Tags",
+                                      "text": "{0}{1}"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "columnMatch": "subscriptionId",
+                                "formatter": 15,
+                                "formatOptions": {
+                                  "linkTarget": null,
+                                  "showIcon": true
+                                }
+                              },
+                              {
+                                "columnMatch": "Description",
+                                "formatter": 1
+                              }
+                            ],
+                            "hierarchySettings": {
+                              "treeType": 1,
+                              "groupBy": [
+                                "Problem"
+                              ],
+                              "expandTopLevel": true
+                            }
+                          }
+                        },
+                        "name": "query - 0"
+                      }
+                    ]
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "RG_Filter",
+                    "comparison": "isEqualTo",
+                    "value": "Tags"
+                  },
+                  "name": "group - AzureAdvisor-Tags"
+                },
+                {
+                  "type": 12,
+                  "content": {
+                    "version": "NotebookGroup/1.0",
+                    "groupType": "editable",
+                    "items": [
+                      {
+                        "type": 12,
+                        "content": {
+                          "version": "NotebookGroup/1.0",
+                          "groupType": "editable",
+                          "items": [
+                            {
+                              "type": 3,
+                              "content": {
+                                "version": "KqlItem/1.0",
+                                "query": "advisorresources\r\n| where type == \"microsoft.advisor/recommendations\"\r\n| where tostring (properties.category) ==  \"OperationalExcellence\"\r\n| extend Problem=properties.shortDescription.problem,AffectedResource=tostring(properties.resourceMetadata.resourceId),Solution=properties.shortDescription.solution,Severity=properties.impact, ResourceGroup=resourceGroup\r\n| project Problem,AffectedResource, Severity, Solution, resourceGroup, subscriptionId\r\n| where resourceGroup in ({ResourceGroup})",
+                                "size": 0,
+                                "title": "Azure Advisor recommendations",
+                                "noDataMessage": "You are following all of our Operational Excellence recommendations",
+                                "noDataMessageStyle": 3,
+                                "showExportToExcel": true,
+                                "queryType": 1,
+                                "resourceType": "microsoft.resourcegraph/resources",
+                                "crossComponentResources": [
+                                  "{Subscription}"
+                                ],
+                                "gridSettings": {
+                                  "formatters": [
+                                    {
+                                      "columnMatch": "Problem",
+                                      "formatter": 1
+                                    },
+                                    {
+                                      "columnMatch": "Severity",
+                                      "formatter": 18,
+                                      "formatOptions": {
+                                        "thresholdsOptions": "colors",
+                                        "thresholdsGrid": [
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "High",
+                                            "representation": "redBright",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "Medium",
+                                            "representation": "orange",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "Low",
+                                            "representation": "turquoise",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "Default",
+                                            "thresholdValue": null,
+                                            "representation": "gray",
+                                            "text": "{0}{1}"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "Solution",
+                                      "formatter": 1
+                                    },
+                                    {
+                                      "columnMatch": "resourceGroup",
+                                      "formatter": 14,
+                                      "formatOptions": {
+                                        "linkTarget": null,
+                                        "showIcon": true
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "subscriptionId",
+                                      "formatter": 15,
+                                      "formatOptions": {
+                                        "linkTarget": null,
+                                        "showIcon": true
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "Description",
+                                      "formatter": 1
+                                    }
+                                  ],
+                                  "hierarchySettings": {
+                                    "treeType": 1,
+                                    "groupBy": [
+                                      "Problem"
+                                    ],
+                                    "expandTopLevel": true
+                                  }
+                                }
+                              },
+                              "name": "query - 0"
+                            }
+                          ]
+                        },
+                        "conditionalVisibility": {
+                          "parameterName": "RG_Filter",
+                          "comparison": "isNotEqualTo",
+                          "value": "Tags"
+                        },
+                        "name": "group - AzureAdvisor-Subscription"
+                      },
+                      {
+                        "type": 12,
+                        "content": {
+                          "version": "NotebookGroup/1.0",
+                          "groupType": "editable",
+                          "items": [
+                            {
+                              "type": 3,
+                              "content": {
+                                "version": "KqlItem/1.0",
+                                "query": "advisorresources\r\n| where type == \"microsoft.advisor/recommendations\"\r\n| where tostring (properties.category) ==  \"OperationalExcellence\"\r\n| extend Problem=properties.shortDescription.problem,AffectedResource=tostring(properties.resourceMetadata.resourceId),AffectedResourceName=tostring(properties.impactedValue),Solution=properties.shortDescription.solution,Severity=properties.impact, ResourceGroup=resourceGroup\r\n| project Problem,AffectedResource, AffectedResourceName, Severity, Solution, subscriptionId\r\n    | join ( resources | mvexpand tags | extend  AffectedResource=id, Tags=tags, resourceGroup \r\n    | extend tagName = tostring(bag_keys(tags)[0])\r\n    | extend tagValue = tostring(tags[tagName]) ) on AffectedResource\r\n    | extend ResourceGroup=strcat(\"/subscriptions/\",subscriptionId,\"/resourceGroups/\",resourceGroup)\r\n    | where tagName has '{TagName}' and tagValue has '{TagValue}'\r\n    | project  Problem,AffectedResource, Tags, subscriptionId, Severity, Solution\r\n",
+                                "size": 0,
+                                "title": "Azure Advisor recommendations",
+                                "noDataMessage": "You are following all of our Operational Excellence recommendations",
+                                "noDataMessageStyle": 3,
+                                "queryType": 1,
+                                "resourceType": "microsoft.resourcegraph/resources",
+                                "crossComponentResources": [
+                                  "value::all"
+                                ],
+                                "gridSettings": {
+                                  "formatters": [
+                                    {
+                                      "columnMatch": "Problem",
+                                      "formatter": 1
+                                    },
+                                    {
+                                      "columnMatch": "Severity",
+                                      "formatter": 18,
+                                      "formatOptions": {
+                                        "thresholdsOptions": "colors",
+                                        "thresholdsGrid": [
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "High",
+                                            "representation": "redBright",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "Medium",
+                                            "representation": "orange",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "==",
+                                            "thresholdValue": "Low",
+                                            "representation": "turquoise",
+                                            "text": "{0}{1}"
+                                          },
+                                          {
+                                            "operator": "Default",
+                                            "thresholdValue": null,
+                                            "representation": "gray",
+                                            "text": "{0}{1}"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "Remediation",
+                                      "formatter": 7,
+                                      "formatOptions": {
+                                        "linkTarget": "Url",
+                                        "linkLabel": "Open remediation"
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "ResourceGroup",
+                                      "formatter": 14,
+                                      "formatOptions": {
+                                        "linkTarget": null,
+                                        "showIcon": true
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "tagName",
+                                      "formatter": 18,
+                                      "formatOptions": {
+                                        "thresholdsOptions": "icons",
+                                        "thresholdsGrid": [
+                                          {
+                                            "operator": "Default",
+                                            "thresholdValue": null,
+                                            "representation": "Tags",
+                                            "text": "{0}{1}"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "tagValue",
+                                      "formatter": 18,
+                                      "formatOptions": {
+                                        "thresholdsOptions": "icons",
+                                        "thresholdsGrid": [
+                                          {
+                                            "operator": "Default",
+                                            "thresholdValue": null,
+                                            "representation": "Tags",
+                                            "text": "{0}{1}"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "subscriptionId",
+                                      "formatter": 15,
+                                      "formatOptions": {
+                                        "linkTarget": null,
+                                        "showIcon": true
+                                      }
+                                    },
+                                    {
+                                      "columnMatch": "Description",
+                                      "formatter": 1
+                                    }
+                                  ],
+                                  "hierarchySettings": {
+                                    "treeType": 1,
+                                    "groupBy": [
+                                      "Problem"
+                                    ],
+                                    "expandTopLevel": true
+                                  }
+                                }
+                              },
+                              "name": "query - 0"
+                            }
+                          ]
+                        },
+                        "conditionalVisibility": {
+                          "parameterName": "RG_Filter",
+                          "comparison": "isEqualTo",
+                          "value": "Tags"
+                        },
+                        "name": "group - AzureAdvisor-Tags"
+                      }
+                    ]
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "selectedTab",
+                    "comparison": "isEqualTo",
+                    "value": "nevershow"
+                  },
+                  "name": "group - AzureAdvisorRG",
+                  "styleSettings": {
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "selectedTab",
+              "comparison": "isEqualTo",
+              "value": "advisor"
+            },
+            "name": "group - AzureAdvisor",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "SelectedTab",
+        "comparison": "isEqualTo",
+        "value": "Recommendations"
+      },
+      "name": "Advisor Recommendations"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
